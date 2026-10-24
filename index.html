@@ -186,7 +186,7 @@ textarea.inp{resize:vertical;min-height:100px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .beams,.n40,.chip i,.bulb,.flame,.spark,.balloon,.bokeh,.neon40{animation:none}
+  .beams,.n40,.neon40{animation:none}
   .btn{transition:none}
 }
 </style>
@@ -321,6 +321,7 @@ textarea.inp{resize:vertical;min-height:100px}
 
 <script>
 const $=s=>document.querySelector(s);
+/* bij 'verminder beweging': geen schermvullende beweging; animaties binnen hun eigen kader blijven aan */
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const rng=s=>()=>(s=(s*1664525+1013904223)>>>0)/4294967296;
 /* Safari voor versie 16 kent roundRect niet; zonder deze aanvulling stopt alle animatie */
@@ -741,9 +742,9 @@ function buildScene(kind){
 
 function drawScene(S,t){
   const {ctx,dpr,w,h,k}=S;
-  const dt=reduce||!S.last?0:Math.max(0,Math.min(.05,t-S.last));S.last=t;
+  const dt=!S.last?0:Math.max(0,Math.min(.05,t-S.last));S.last=t;
   /* het eiland zweeft zachtjes */
-  const float=reduce?0:Math.sin(t*.7)*k*.12;
+  const float=Math.sin(t*.7)*k*.12;
   S.fx.style.transform=`translateY(${float}px)`;
   ctx.setTransform(1,0,0,1,0,0);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;ctx.clearRect(0,0,S.cv.width,S.cv.height);
   ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -792,7 +793,7 @@ function drawScene(S,t){
       else{ar.st.vx+=((tx2-ar.st.x)*340-ar.st.vx*19)*dt;ar.st.vy+=((ty2-ar.st.y)*340-ar.st.vy*19)*dt;ar.st.x+=ar.st.vx*dt;ar.st.y+=ar.st.vy*dt}
       const hx=ar.st.x,hy=ar.st.y;
       if(ar.lead){
-        if(S.lastClink<.5&&p>=.5&&!reduce){
+        if(S.lastClink<.5&&p>=.5){
           if(S.spark)S.spark.animate([{transform:'scale(.2)',opacity:0},{transform:'scale(1.2)',opacity:1,offset:.3},{transform:'scale(.9)',opacity:.8,offset:.6},{transform:'scale(.3)',opacity:0}],{duration:750,easing:'ease-out'});
           for(let i=0;i<12;i++)S.drops.push({x:S.hit[0],y:S.hit[1],vx:(Math.random()-.5)*k*5,vy:-k*(3+Math.random()*4),life:1,c:i%3?'#FFE08A':'#FFF6E0'});
         }
@@ -971,7 +972,6 @@ function clockFrame(){
   clockStr=str;
   if(clockVisible){
     dots.forEach(d=>{
-      if(reduce){d.x=d.tx;d.y=d.ty;return}
       d.vx=(d.vx+(d.tx-d.x)*.16)*.72;d.vy=(d.vy+(d.ty-d.y)*.16)*.72;d.x+=d.vx;d.y+=d.vy;
     });
     drawClock();
@@ -1126,7 +1126,7 @@ if(reduce)draw();
 else{runLoop();setTimeout(cannons,500)}
 document.fonts.ready.then(()=>{safely('skyline',renderSkyline);safely('illustraties',renderScenes);safely('klok',()=>layoutClock(clockStr))});
 safely('skyline',renderSkyline);safely('illustraties',renderScenes);
-if(!reduce)requestAnimationFrame(animateArt);
+requestAnimationFrame(animateArt);
 </script>
 </body>
 </html>
