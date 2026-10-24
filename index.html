@@ -864,7 +864,6 @@ function burst(x,y,n,angle,spread,power){
     const a=angle+(r()-.5)*spread,v=Math.sqrt(2*g*FH*power)*(.55+r()*.6);
     P.push(piece({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g,burst:1}));
   }
-  if(reduce)runLoop();
 }
 function cannons(){
   burst(-10,FH+10,140,-Math.PI/3,.7,.95);
@@ -883,23 +882,19 @@ function draw(){
 }
 function step(dt){
   for(let i=P.length-1;i>=0;i--){
-    const p=P[i];
-    if(reduce&&!p.burst)continue;
+    const p=P[i],d=p.burst||!reduce?dt:dt*.3;
     if(p.burst){
-      p.vy+=p.g*dt;p.vx*=Math.pow(.985,dt);
-      if(p.vy>0){p.vy=Math.min(p.vy,FH/260);p.vx+=Math.sin(p.ph)*.06*dt}
-    }else p.x+=Math.sin(p.ph)*.3*dt;
-    p.x+=p.vx*dt;p.y+=p.vy*dt;p.rot+=p.vr*dt;p.ph+=.06*dt;
+      p.vy+=p.g*d;p.vx*=Math.pow(.985,d);
+      if(p.vy>0){p.vy=Math.min(p.vy,FH/260);p.vx+=Math.sin(p.ph)*.06*d}
+    }else p.x+=Math.sin(p.ph)*.3*d;
+    p.x+=p.vx*d;p.y+=p.vy*d;p.rot+=p.vr*d;p.ph+=.06*d;
     if(p.y>FH+30){if(p.burst)P.splice(i,1);else{p.y=-20;p.x=Math.random()*FW}}
   }
 }
-let looping=false;
-function runLoop(){if(!looping){looping=true;last=0;requestAnimationFrame(loop)}}
+/* bij 'verminder beweging' dwarrelt de achtergrondconfetti op 30% van de snelheid */
 function loop(t){
   const dt=last?Math.min(3,(t-last)/16.67):1;last=t;
-  step(dt);draw();
-  if(reduce&&!P.some(p=>p.burst)){looping=false;return}
-  requestAnimationFrame(loop);
+  step(dt);draw();requestAnimationFrame(loop);
 }
 
 /* ---------- Aftelklok: gloeiende stippen vliegen naar hun nieuwe plek, wat over is valt als confetti ---------- */
@@ -1119,11 +1114,11 @@ $('#more-top').addEventListener('click',cannons);
 fitFx();seedAmbient();
 let rw=innerWidth,rt;
 addEventListener('resize',()=>{
-  fitFx();if(reduce)draw();
+  fitFx();
   clearTimeout(rt);rt=setTimeout(()=>{if(innerWidth!==rw){rw=innerWidth;safely('skyline',renderSkyline);safely('illustraties',renderScenes);safely('klok',()=>layoutClock(clockStr));seedAmbient()}},150);
 });
-if(reduce)draw();
-else{runLoop();setTimeout(cannons,500)}
+requestAnimationFrame(loop);
+if(!reduce)setTimeout(cannons,500);
 document.fonts.ready.then(()=>{safely('skyline',renderSkyline);safely('illustraties',renderScenes);safely('klok',()=>layoutClock(clockStr))});
 safely('skyline',renderSkyline);safely('illustraties',renderScenes);
 requestAnimationFrame(animateArt);
