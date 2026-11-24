@@ -223,7 +223,7 @@ textarea.inp{resize:vertical;min-height:100px}
         <div class="art"><canvas id="art-avond" aria-hidden="true"></canvas><div class="art-fx" id="fx-avond" aria-hidden="true"></div></div>
         <span class="when">Avond</span>
         <p class="time">20.00 – 00.00</p>
-        <p>Gezellige avond thuis, met een hapje en een drankje.</p>
+        <p>Gezellige avond bij ons thuis, met een hapje en een drankje.</p>
         <div class="slot-foot"><a class="chip" href="https://www.google.com/maps/search/?api=1&amp;query=Hanzelaan%2063%2C%208262%20VA%20Kampen" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>Hanzelaan 63, Kampen</a></div>
       </article>
     </div>
@@ -980,7 +980,7 @@ const ICS=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//veertigjaarhoera//NL','CAL
   'BEGIN:VEVENT','UID:mattijn40-dag@veertigjaarhoera','DTSTAMP:20261124T120000Z','DTSTART:20270109T130000Z','DTEND:20270109T170000Z',
   'SUMMARY:Mattijn wordt 40 - middag','LOCATION:Sportvereniging Wit-Blauw\\, Hilbert van Dijkstraat 5\\, 8264 PC Kampen','DESCRIPTION:Voor jong en oud\\, inclusief avondeten.','END:VEVENT',
   'BEGIN:VEVENT','UID:mattijn40-avond@veertigjaarhoera','DTSTAMP:20261124T120000Z','DTSTART:20270109T190000Z','DTEND:20270109T230000Z',
-  'SUMMARY:Mattijn wordt 40 - gezellige avond','LOCATION:Hanzelaan 63\\, 8262 VA Kampen','DESCRIPTION:Gezellige avond thuis\\, met een hapje en een drankje.','END:VEVENT',
+  'SUMMARY:Mattijn wordt 40 - gezellige avond','LOCATION:Hanzelaan 63\\, 8262 VA Kampen','DESCRIPTION:Gezellige avond bij ons thuis\\, met een hapje en een drankje.','END:VEVENT',
   'END:VCALENDAR'].join('\r\n');
 $('#ics').addEventListener('click',()=>{
   const url=URL.createObjectURL(new Blob([ICS],{type:'text/calendar'}));
@@ -990,7 +990,7 @@ $('#ics').addEventListener('click',()=>{
 $('#gcal').href='https://calendar.google.com/calendar/render?action=TEMPLATE'
   +'&text='+encodeURIComponent('Mattijn wordt 40')
   +'&dates=20270109T130000Z/20270109T230000Z'
-  +'&details='+encodeURIComponent('Middag 14.00–18.00 bij sportvereniging Wit-Blauw, Hilbert van Dijkstraat 5, 8264 PC Kampen, inclusief avondeten. Avond 20.00–00.00 thuis, Hanzelaan 63, 8262 VA Kampen.')
+  +'&details='+encodeURIComponent('Middag 14.00–18.00 bij sportvereniging Wit-Blauw, Hilbert van Dijkstraat 5, 8264 PC Kampen, inclusief avondeten. Avond 20.00–00.00 bij ons thuis, Hanzelaan 63, 8262 VA Kampen.')
   +'&location='+encodeURIComponent('Kampen');
 
 /* ---------- Aanmelden ---------- */
